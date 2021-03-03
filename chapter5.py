@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 
 img = cv2.imread('cards.jpg')
-
 width, height = 250, 350
 
 pts1 = np.float32([[409, 88], [532, 140], [311, 249], [470, 333]])
