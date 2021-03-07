@@ -40,7 +40,35 @@ def getContours(img):
     for cnt in contours:
         area = cv2.contourArea(cnt)
         print(area)
-        cv2.drawContours(imgContour, cnt, -1, (255, 0, 0), 3)
+        if area > 500:
+            cv2.drawContours(imgContour, cnt, -1, (255, 0, 0), 3)
+            peri = cv2.arcLength(cnt, True)
+            approx_polygon = cv2.approxPolyDP(cnt, 0.02 * peri, True)
+            print(len(approx_polygon))
+            vert_count = len(approx_polygon)
+            x, y, w, h = cv2.boundingRect(approx_polygon)
+
+            if vert_count == 3:
+                object_type = 'Tri'
+            elif vert_count == 4:
+                aspect_ratio = w / float(h)
+                if aspect_ratio > 0.95 and aspect_ratio < 1.05:
+                    print('square ', aspect_ratio)
+                    object_type = 'Square'
+                else:
+                    object_type = 'Rect'
+            elif vert_count > 4:
+                object_type = 'Circle    '
+            else:
+                object_type = 'None'
+
+            cv2.rectangle(imgContour, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.putText(imgContour,
+                        object_type,
+                        (x + (w // 2) - 10, y + (h // 2) - 10),
+                        cv2.FONT_HERSHEY_COMPLEX,
+                        0.7,
+                        (0, 0, 0))
 
 
 path = 'shapes.png'
@@ -52,7 +80,7 @@ imgBlank = np.zeros_like(img)
 imgCanny = cv2.Canny(imgBlur, 50, 50)
 getContours(imgCanny)
 
-imgStack = stackImages(0.6, ([img, imgBlur, imgGray],
+imgStack = stackImages(0.8, ([img, imgBlur, imgGray],
                              [imgCanny, imgContour, imgBlank]))
 
 # cv2.imshow('Original', img)
