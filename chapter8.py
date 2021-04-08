@@ -58,7 +58,7 @@ def getContours(img):
                 else:
                     object_type = 'Rect'
             elif vert_count > 4:
-                object_type = 'Circle    '
+                object_type = 'Circle'
             else:
                 object_type = 'None'
 

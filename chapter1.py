@@ -5,7 +5,7 @@ import cv2
 # cv2.waitKey(0)
 
 # cap = cv2.VideoCapture('test-video.mp4')
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 # width
 cap.set(3, 640)
 # height
